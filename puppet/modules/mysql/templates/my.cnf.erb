@@ -1,0 +1,48 @@
+[mysqld]
+#Zruseni resolve ip adress
+skip-name-resolve
+
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+user=mysql
+
+server-id=<%= scope.lookupvar('mysql::server::mysql_server_id') %>
+
+auto_increment_increment=2
+auto_increment_offset=<%= scope.lookupvar('mysql::server::mysql_server_id') %>
+
+replicate-do-db = <%= scope.lookupvar('mysql_schema') %>
+binlog-do-db = <%= scope.lookupvar('mysql_schema') %>
+
+log-bin = /var/lib/mysql/mysql-bin.log
+log-bin-index = /var/lib/mysql/mysql-log-bin.index
+
+relay-log = /var/lib/mysql/mysql-relay-bin.log
+relay-log-index = /var/lib/mysql/mysql-relay-log.index
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+# Semisynchronous Replication
+# http://dev.mysql.com/doc/refman/5.5/en/replication-semisync.html
+# uncomment next line on MASTER
+;plugin-load=rpl_semi_sync_master=semisync_master.so
+# uncomment next line on SLAVE
+;plugin-load=rpl_semi_sync_slave=semisync_slave.so
+
+# Others options for Semisynchronous Replication
+;rpl_semi_sync_master_enabled=1
+;rpl_semi_sync_master_timeout=10
+;rpl_semi_sync_slave_enabled=1
+
+# http://dev.mysql.com/doc/refman/5.5/en/performance-schema.html
+;performance_schema
+
+slow-query-log
+log-queries-not-using-indexes
+long_query_time = 1
+slow_query_log_file = /var/lib/mysql/slow-query.log
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid

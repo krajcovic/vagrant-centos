@@ -1,0 +1,4 @@
+CREATE USER '<%= scope.lookupvar('mysql_replication_user') %>'@'<%= scope.lookupvar('mysql::server::mysql_master_ip') %>' IDENTIFIED BY '<%= scope.lookupvar('mysql_replication_user_password') %>';
+GRANT REPLICATION SLAVE ON *.* TO '<%= scope.lookupvar('mysql_replication_user') %>'@'<%= scope.lookupvar('mysql::server::mysql_master_ip') %>';
+CHANGE MASTER TO MASTER_HOST='<%= scope.lookupvar('mysql::server::mysql_master_ip') %>', MASTER_USER='<%= scope.lookupvar('mysql_replication_user') %>', MASTER_PASSWORD='<%= scope.lookupvar('mysql_replication_user_password') %>';
+START SLAVE;

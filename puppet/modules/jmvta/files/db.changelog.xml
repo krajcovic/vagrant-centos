@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet id="1.0.0" author="Dusan Krajcovic">
+      <sql>
+CREATE TABLE `jmvta`.`mvta_trn` (
+  `id_mvta_trn` int(11) NOT NULL AUTO_INCREMENT,
+  `terminalid` char(8) COLLATE utf8_czech_ci NOT NULL,
+  `messagetimestamp` timestamp NULL DEFAULT NULL,
+  `transactionid` char(20) COLLATE utf8_czech_ci NOT NULL,
+  `amount` int(11) DEFAULT '0',
+  `currency` char(3) COLLATE utf8_czech_ci NOT NULL DEFAULT 'CZK',
+  `operatorcode` int(5) DEFAULT NULL,
+  `targetmsisdn` char(13) COLLATE utf8_czech_ci DEFAULT NULL,
+  `sourcemsisdn` char(13) COLLATE utf8_czech_ci DEFAULT NULL,
+  `responsecode` int(11) DEFAULT '0',
+  `taxno` char(20) COLLATE utf8_czech_ci DEFAULT NULL,
+  `transCode` int(3) NOT NULL DEFAULT '0',
+  `operatation` int(1) NOT NULL DEFAULT '0' COMMENT '0 - validace, 1 - dobiti',
+  `posid` char(10) COLLATE utf8_czech_ci NOT NULL DEFAULT '0' COMMENT 'parametr 403, Vxxxxxxxxx',
+  UNIQUE KEY `id_mvta_trn` (`id_mvta_trn`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci COMMENT='utf8_czech_ci';
+
+ALTER TABLE `jmvta`.`mvta_trn`
+CHANGE COLUMN `operatation` `operatation` int(1) NOT NULL COMMENT '0 - echo, 1 - validace, 2 - storno, 3 - dobiti' COLLATE 'utf8_czech_ci' AFTER `transCode`;
+
+alter table `jmvta`.`mvta_trn` modify column `id_mvta_trn` bigint not null auto_increment FIRST;
+
+alter table `jmvta`.`mvta_trn` change column `operatation` `operation` int(1) not null AFTER `transCode` ,comment = 'utf8_czech_ci';
+alter table `jmvta`.`mvta_trn` add column `last_messagetimestamp` timestamp null default '0000-00-00 00:00:00' AFTER `posid`;
+
+CREATE TABLE `jmvta`.`operatorcode` (
+  `code` int(5) NOT NULL,
+  `name` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+  `displayname` varchar(50) COLLATE utf8_czech_ci NOT NULL,
+  `image` blob,
+  PRIMARY KEY (`code`),
+  UNIQUE KEY `operatorcode_UNIQUE` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci COMMENT='kody operatoru';
+
+CREATE TABLE `jmvta`.`responsecode` (
+  `code` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+  `displayname` varchar(50) COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci COMMENT='chybove kody';
+
+CREATE  TABLE `jmvta`.`terminal_status` (
+  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Record id' ,
+  `terminal_id` VARCHAR(16) NOT NULL COMMENT 'Terminal ID.' ,
+  `transaction_id_last` VARCHAR(20) NULL COMMENT 'Last executed transaction id.' ,
+  `timestamp` DATETIME NULL COMMENT 'last timestamp' ,
+  PRIMARY KEY (`id`, `terminal_id`) ,
+  UNIQUE INDEX `terminal_id_UNIQUE` (`terminal_id` ASC) )
+ENGINE = InnoDB;
+      </sql>
+    </changeSet>
+ 
+    <changeSet id="1.0.1" author="Dusan Krajcovic">
+      <sql>
+CREATE  TABLE `jmvta`.`validates` (
+  `id` INT NOT NULL ,
+  `terminal_id` VARCHAR(45) NULL ,
+  `timestamp` TIMESTAMP NULL ,
+  `transaction_id` VARCHAR(45) NULL ,
+  `amount` INT NULL ,
+  `currency` INT NULL ,
+  `operator_code` INT NULL ,
+  `target_msisdn` VARCHAR(45) NULL ,
+  `source_msisdn` VARCHAR(45) NULL ,
+  `response_code` INT NULL ,
+  `response_string` VARCHAR(45) NULL ,
+  `tax_no` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+COMMENT = 'Validation transactions';
+
+CREATE  TABLE `jmvta`.`cancels` (
+  `id` INT NOT NULL ,
+  `terminal_id` VARCHAR(45) NULL ,
+  `timestamp` TIMESTAMP NULL ,
+  `transaction_id` VARCHAR(45) NULL ,
+  `type` INT NULL ,
+  `response_code` INT NULL ,
+  `response_message` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+COMMENT = 'Cancels transactions';
+
+CREATE  TABLE `jmvta`.`submits` (
+  `id` INT NOT NULL ,
+  `terminal_id` VARCHAR(45) NULL ,
+  `timestamp` TIMESTAMP NULL ,
+  `type` INT NULL ,
+  `settlement_date` DATETIME NULL ,
+  `transaction_id` VARCHAR(45) NULL ,
+  `response_code` INT NULL ,
+  `response_message` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+COMMENT = 'Submit transactions.';
+      </sql>
+    </changeSet>
+    <changeSet id="1.0.2" author="Dusan Krajcovic">
+      <sql>
+ALTER TABLE `jmvta`.`validates` CHANGE COLUMN `currency` `currency` VARCHAR(3) NULL DEFAULT NULL  ;
+ALTER TABLE `jmvta`.`validates` CHANGE COLUMN `response_string` `response_message` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL  ;
+ALTER TABLE `jmvta`.`validates` 
+ADD UNIQUE INDEX `id_UNIQUE` (`id` ASC) ;
+ALTER TABLE `jmvta`.`validates` CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT  ;
+ALTER TABLE `jmvta`.`submits` CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT  
+, ADD UNIQUE INDEX `id_UNIQUE` (`id` ASC) ;
+ALTER TABLE `jmvta`.`cancels` CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT  
+, ADD UNIQUE INDEX `id_UNIQUE` (`id` ASC) ;
+      </sql>
+    </changeSet>
+    <changeSet id="1.0.3" author="Dusan Krajcovic">
+      <sql>    
+CREATE  TABLE `jmvta`.`operator_details` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `operator_code` INT NOT NULL ,
+  `vat` VARCHAR(45) NULL ,
+  `line_1` VARCHAR(45) NULL ,
+  `line_2` VARCHAR(45) NULL ,
+  `line_3` VARCHAR(45) NULL ,
+  `line_4` VARCHAR(45) NULL ,
+  `line_5` VARCHAR(45) NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
+ENGINE = InnoDB
+COMMENT = 'Hlavicky operatoru pro tisk';
+ALTER TABLE `jmvta`.`operator_details` 
+ADD UNIQUE INDEX `operator_code_UNIQUE` (`operator_code` ASC) ;
+INSERT INTO `jmvta`.`operator_details` (`id`, `operator_code`, `vat`, `line_1`, `line_2`, `line_3`, `line_4`, `line_5`) VALUES (1, 23001, 'CZ64949681', 'T-Mobile', 'Czech Republic a.s.', 'Tomíčková 2144/1', '149 00 Praha 4', 'Česká Republika');
+INSERT INTO `jmvta`.`operator_details` (`id`, `operator_code`, `vat`, `line_1`, `line_2`, `line_3`, `line_4`, `line_5`) VALUES (2, 23002, 'CZ601933336', 'Telefonica 02', 'Czech Repulblic a.s.', 'Olšanská 5/55', '130 34 Praha 3', 'Česká Republika');
+INSERT INTO `jmvta`.`operator_details` (`id`, `operator_code`, `vat`, `line_1`, `line_2`, `line_3`, `line_4`, `line_5`) VALUES (3, 23003, 'CZ25788001', 'Vodafone', 'Czech Republic a.s.', 'Vinohradská 167', '100 00 Praha 10', 'Česká Republika');
+INSERT INTO `jmvta`.`operator_details` (`id`, `operator_code`, `vat`, `line_1`, `line_2`, `line_3`, `line_4`, `line_5`) VALUES (4, 23050, 'CZ64949681', 'COOP Mobile', 'Czech Republic a.s.', 'Tomíčková 2144/1', '149 00 Praha 4', 'Česká Republika');
+      </sql>
+    </changeSet>
+</databaseChangeLog>

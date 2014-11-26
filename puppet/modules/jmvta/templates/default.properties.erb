@@ -1,0 +1,96 @@
+				
+############################################################################################
+### WORKER with integrated Hazelcast server
+############################################################################################
+
+# Database
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://<%= scope.lookupvar('server0_ip') %>/jmvta?useUnicode=yes&amp;characterEncoding=UTF-8
+jdbc.username=<%= scope.lookupvar('mysql_user') %>
+jdbc.password=<%= scope.lookupvar('mysql_user_pwd') %>
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+hibernate.hbm2ddl=verify
+hibernate.default_schema=<%= scope.lookupvar('mysql_schema') %>
+
+### Cluster
+cluster.init.wait.ms=2000
+cluster.heartbeat.task.cron=*/2 * * * * ?
+cluster.heartbeat.map.name=heartbeat
+cluster.heartbeat.item.ttl.seconds=15
+
+# Config for MVTA receiving server.
+server.secure=true
+# Verejna IP
+server.address=<%= scope.lookupvar('server1_ip') %>	
+server.port=27777
+server.keystore.filename=./keystore_server
+server.keystore.password=asdfgh
+server.truststore.filename=./truststore_server
+server.truststore.password=asdfgh
+
+# HSM
+hsm.addr=172.27.21.236
+hsm.port=6006
+hsm.com.master.key=/opt/<%= scope.lookupvar('application_name') %>/jmvta_worker/conf/20110811_vaskey.bin
+hsm.com.master.key.length = 24
+
+################################################################################
+# GPE
+################################################################################
+# Develop
+server.gpe.url=https://potopws.test.gpe.cz:443/potopws/potopWSComProcessing
+#server.gpe.ssh.key=/opt/<%= scope.lookupvar('application_name') %>/jmvta_worker/conf/https_produkce_2013.pem
+#server.gpe.ssh.pas=mon.505
+#server.gpe.ssh.ca=/opt/<%= scope.lookupvar('application_name') %>/jmvta_worker/conf/thawtePrimaryRootCA.crt
+
+# ServisTest
+#server.gpe.url=http://localhost:9080/gpe-server/services/PotopWSComProcessor
+#server.gpe.sign.key=/home/krajcovic/workspace/sources/jmvta/jmvta-server/servers/jmvta-worker/src/test/resources/MonetplusProdukce2012.pem
+#server.gpe.sign.pas=mon.505
+#server.gpe.sing.crt=/home/krajcovic/workspace/sources/jmvta/jmvta-server/servers/jmvta-worker/src/test/resources/MonetplusProdukce2012.pem
+
+################################################################################
+# Materna
+################################################################################
+# Develop
+server.materna.url=https://194.228.111.71:2443/csob/potop-operator-recharging
+#server.materna.ssh.key=/home/krajcovic/workspace/sources/jmvta/jmvta-server/servers/jmvta-worker/src/test/resources/https_produkce_2013.pem
+#server.materna.ssh.pas=mon.505
+#server.materna.ssh.ca=/home/vas/mvta/modelovka/gpe/thawte/thawtePrimaryRootCA.crt
+
+# ServisTest
+#server.materna.url=https://194.228.111.71:2443/csob/potop-operator-recharging
+#server.materna.sign.key=/home/krajcovic/workspace/sources/jmvta/jmvta-server/servers/jmvta-worker/src/test/resources/MonetplusProdukce2012.pem
+#server.materna.sign.pas=mon.505
+#server.materna.sing.crt=/home/krajcovic/workspace/sources/jmvta/jmvta-server/servers/jmvta-worker/src/test/resources/MonetplusProdukce2012.pem
+
+################################################################################
+# Klub
+################################################################################
+server.klub.url.registration=http://54.229.154.233/crmposserviceTEST/crmposapi.asmx
+server.klub.url.XLS=http://85.248.138.5:9040/XLS73WS/services/OceService
+################################################################################
+
+server.klub.cache.mode=0
+
+################################################################################
+# Type of device:
+#	0: POS terminal 
+#	1: ePOS 
+#	2: PSP 
+#	3: Mail order, telephone order 
+#	Others: RFU
+server.klub.device.type=1
+
+################################################################################
+# Manufacturer name, software name and version of the thin client. 
+# This field uniquely identifies the thin client software. Its value is assigned by Welcome Real-time. 
+# Example: 
+#	"WRT 70r1" for Welcome POS Client v7.0 release 1
+server.klub.device.version=WRT 70r1
+server.klub.registration.disable.expiration=true
+
+
+# Data for MVTA tickets printed on terminal
+mvta.data.vat=20.00%
+
