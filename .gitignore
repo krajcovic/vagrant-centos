@@ -1,0 +1,32 @@
+###vim###
+ 
+*~
+.*.sw[a-z]
+*.un~
+Session.vim
+
+# Vagrant stuff
+acceptance_config.yml
+boxes/*
+.vagrant
+
+# Bundler/Rubygems
+*.gem
+.bundle
+pkg/*
+tags
+Gemfile.lock
+test/tmp/
+
+# Documentation
+_site/*
+.yardoc/
+doc/
+
+# Python
+*.pyc
+
+# Rubinius
+*.rbc
+
+
