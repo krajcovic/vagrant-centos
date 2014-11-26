@@ -6,11 +6,11 @@ Vagrant.require_version ">= 1.3.5"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "centos-7.0-x86_64.box"
+  config.vm.box = "CentOS-6.5-x86_64-v20140311.box"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "https://dl.dropboxusercontent.com/s/w3lbekm7eunrskm/centos-7.0-x86_64.box"
+  config.vm.box_url = "https://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.5-x86_64-v20140311.box"
 
   ############################################
   ### NODE 0 - DB
