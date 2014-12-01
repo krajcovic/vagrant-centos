@@ -12,19 +12,18 @@ $mysql_replication_user          = "repl"
 $mysql_replication_user_password = "slavepass"
 
 
-#include env
-#include mongo
+include env
 
-#node 'node0' {
+node 'node0' {
 	#class { 'mysql::server': mysql_server_id => 1, mysql_master_ip => $server0_ip }
 	#include jmvta
 	#include jmvta::db
 	#include jmvta::db_changelog
-#}
+}
 
-#node 'node1' {
+node 'node1' {
 	#include jmvta::worker
-#}
+}
 
 #node 'node2' {
 	#include mysql

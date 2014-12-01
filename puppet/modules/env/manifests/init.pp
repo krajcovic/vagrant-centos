@@ -103,31 +103,32 @@ class env {
 	# metadata_expire => 30s,
  #    }
 
-    yumrepo { "mysql-connectors-community":
-	baseurl => "http://repo.mysql.com/yum/mysql-connectors-community/el/6/x86_64/",
-	descr => "MySQL Connectors Community",
-	enabled => 1,
-	gpgcheck => 0,
-	protect => 0,
-    }
+ #    yumrepo { "mysql-connectors-community":
+	# baseurl => "http://repo.mysql.com/yum/mysql-connectors-community/el/6/x86_64/",
+	# descr => "MySQL Connectors Community",
+	# enabled => 1,
+	# gpgcheck => 0,
+	# protect => 0,
+ #    }
 
-    yumrepo { "mysql-tools-community":
-	baseurl => "http://repo.mysql.com/yum/mysql-tools-community/el/6/x86_64/",
-	descr => "MySQL Tools Community",
-	enabled => 1,
-	gpgcheck => 0,
-	protect => 0,
-    }
+ #    yumrepo { "mysql-tools-community":
+	# baseurl => "http://repo.mysql.com/yum/mysql-tools-community/el/6/x86_64/",
+	# descr => "MySQL Tools Community",
+	# enabled => 1,
+	# gpgcheck => 0,
+	# protect => 0,
+ #    }
 
-    yumrepo { "mysql-56-community":
-	baseurl => "http://repo.mysql.com/yum/mysql-5.6-community/el/6/x86_64/",
-	descr => "MySQL 56 Community",
-	enabled => 1,
-	gpgcheck => 0,
-	protect => 0,
-    }
+ #    yumrepo { "mysql-56-community":
+	# baseurl => "http://repo.mysql.com/yum/mysql-5.6-community/el/6/x86_64/",
+	# descr => "MySQL 56 Community",
+	# enabled => 1,
+	# gpgcheck => 0,
+	# protect => 0,
+ #    }
 
     # exec { "system-update":
-    # 	 command => "/usr/bin/yum -y -q update",
-    # }
+    #   	 command => "/usr/bin/yum -y -q update",
+    #   	 timeout => 0,
+    #  }
 }
