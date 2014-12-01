@@ -7,15 +7,15 @@ class env {
     File { owner => 0, group => 0, mode => 0644 }
 
     file { '/etc/motd':
-	content => "Welcome to your CentOS 7 $hostname VM!
+	content => "Welcome to your CentOS 6.5 $hostname VM!
 		    Managed by Puppet.\n"
     }
 
- #    resolv_conf { "monet+":
-	# domainname  => "monetplus.cz",
-	# searchpath  => ['monetplus.cz'],
-	# nameservers => ['193.33.22.33', '193.33.23.33'],
- #    }
+    resolv_conf { "nitrok":
+	  domainname  => "nitrok.cz",
+	  searchpath  => ['nitrok.cz'],
+	  nameservers => ['192.168.10.1'],
+     }
 
  #    host { 'gerald':
 	# ip => '172.27.170.70',
@@ -126,4 +126,8 @@ class env {
 	gpgcheck => 0,
 	protect => 0,
     }
+
+    # exec { "system-update":
+    # 	 command => "/usr/bin/yum -y -q update",
+    # }
 }

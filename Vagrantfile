@@ -25,6 +25,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #  "--cpus", "1",
     #]
 
+    #node0.vm.hostname = "vagrant.example.com"
+
     node0.vm.provider "virtualbox" do |vb|
       vb.customize ["modifyvm", :id, "--name", "Cent - Database", "--memory", "256", "--cpus", "1"]
     end
@@ -32,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # network
     #node0.vm.network "public_network", ip: "172.22.17.1
     #node0.vm.network :hostonly, "192.168.233.10"
-    node0.vm.network "private_network", ip: "192.168.1.10"
+    node0.vm.network "private_network", ip: "192.168.10.10"
 
     # SSH
     #node0.vm.forward_port 22, 20022
@@ -50,7 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node0.vm.provision "shell" do |s|
       #s.inline = "echo hello"
       s.path = "scripts/provision.sh"
-      s.args = "'node0.jmvta.internal'"
+      s.args = "node0.nitrok.local"
     end
 
     #node0.vm.provision :puppet do |puppet|
@@ -75,12 +77,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   
     # network
-    node1.vm.network "private_network", ip: "192.168.1.11"
+    node1.vm.network "private_network", ip: "192.168.10.11"
 
     node1.vm.provision "shell" do |s|
       #s.inline = "echo hello"
       s.path = "scripts/provision.sh"
-      s.args = "'node1.jmvta.internal'"
+      s.args = "node1.nitrok.local"
     end
 
     node1.vm.provision "puppet" do |p|
